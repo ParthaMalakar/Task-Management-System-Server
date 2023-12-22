@@ -82,6 +82,39 @@ async function run() {
         const result = await TaskCollection.updateOne(filter, updatedDoc)
         res.send(result);
       });
+      app.get('/delete/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) }
+        const tasks = await TaskCollection.deleteOne(filter);
+        res.send(tasks);
+      });
+
+      app.get('/Details/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) }
+        const result = await TaskCollection.findOne(query);
+        res.send(result);
+      })
+      app.put('/task/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) }
+        const options = { upsert: true };
+        const updatedfood = req.body;
+  
+        const food = {
+          $set: {
+            title: updatedfood.food_name,
+            descriptions: updatedfood.food_image,
+            deadlines: updatedfood.food_category,
+            priority: updatedfood.quantity,
+            
+          }
+        }
+  
+        const result = await TaskCollection.updateOne(filter, food, options);
+        res.send(result);
+      })
+
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
