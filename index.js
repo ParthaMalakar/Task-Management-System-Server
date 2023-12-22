@@ -61,6 +61,27 @@ async function run() {
         const tasks = await TaskCollection.find(query).toArray();
         res.send(tasks);
       });
+      app.get('/taskcom/:email', async (req, res) => {
+        const mail = req.params.email;
+        const query = { 
+          email:mail,
+          status: "complete" };
+        const tasks = await TaskCollection.find(query).toArray();
+        res.send(tasks);
+      });
+      app.patch('/tasks/:id', async (req, res) => {
+        const item = req.body;
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) }
+        const updatedDoc = {
+          $set: {
+            status:item.status
+          }
+        }
+  
+        const result = await TaskCollection.updateOne(filter, updatedDoc)
+        res.send(result);
+      });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
