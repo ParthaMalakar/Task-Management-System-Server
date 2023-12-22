@@ -44,9 +44,23 @@ async function run() {
         const result = await TaskCollection.insertOne(user);
         res.send(result);
       });
-
+      app.get('/task/:email', async (req, res) => {
+        const mail = req.params.email;
+        const query = { 
+          email:mail,
+          status: "ToDo" };
+        const tasks = await TaskCollection.find(query).toArray();
+        res.send(tasks);
+      });
   
-    
+      app.get('/taskgo/:email', async (req, res) => {
+        const mail = req.params.email;
+        const query = { 
+          email:mail,
+          status: "ongoing" };
+        const tasks = await TaskCollection.find(query).toArray();
+        res.send(tasks);
+      });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
